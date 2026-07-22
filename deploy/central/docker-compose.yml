@@ -1,0 +1,61 @@
+# Central monitoring stack for a fleet of gpumon nodes.
+#
+#   cd deploy/central && docker compose up -d
+#
+# Then point each node at this host's broker:
+#   python3 -m gpumon --mqtt-host <this-host> --mqtt-node gpu-rig-01
+#
+# Grafana:    http://<this-host>:3000   (admin / admin)
+# Prometheus: http://<this-host>:9090
+# Broker:     mqtt://<this-host>:1883
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: gpumon-mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - mosquitto-data:/mosquitto/data
+    restart: unless-stopped
+
+  bridge:
+    build:
+      context: ../..
+      dockerfile: deploy/central/Dockerfile
+    container_name: gpumon-bridge
+    command: ["--mqtt-host", "mosquitto", "--port", "9109", "--stale-after", "30"]
+    depends_on: [mosquitto]
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: gpumon-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    depends_on: [bridge]
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: gpumon-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    depends_on: [prometheus]
+    restart: unless-stopped
+
+volumes:
+  mosquitto-data:
+  prometheus-data:
+  grafana-data:

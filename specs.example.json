@@ -1,0 +1,8 @@
+{
+  "_comment": "Rated-spec overrides for gpumon. Keys are either a PCI id as 'vendor:device' (lowercase hex, no 0x) or an exact model name. Values pin the expected clock/power so failure detection works from the first sample. Highest priority after the per-GPU 'expected' block in config.json. Useful for APUs/OEM parts that spec databases don't cover.",
+
+  "1002:15e7": { "max_clock_mhz": 1800, "power_w": 30 },
+
+  "GeForce RTX 3080": { "max_clock_mhz": 1710, "power_w": 320 },
+  "Radeon RX 6800 XT": { "max_clock_mhz": 2250, "power_w": 300 }
+}

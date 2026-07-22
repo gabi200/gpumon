@@ -1,0 +1,645 @@
+{
+  "uid": "gpumon-fleet",
+  "title": "gpumon \u2014 GPU Fleet",
+  "tags": [
+    "gpu",
+    "gpumon"
+  ],
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "refresh": "10s",
+  "timezone": "browser",
+  "templating": {
+    "list": [
+      {
+        "name": "node",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "gpumon-prom"
+        },
+        "query": {
+          "query": "label_values(gpumon_node_up, node)",
+          "refId": "A"
+        },
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "sort": 1,
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "label": "Node"
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Nodes Up",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "sum(gpumon_node_up) or vector(0)",
+          "refId": "A",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "id": 1
+    },
+    {
+      "type": "stat",
+      "title": "GPUs Critical",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "count(gpumon_gpu_health_state == 3) or vector(0)",
+          "refId": "A",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "id": 2
+    },
+    {
+      "type": "stat",
+      "title": "GPUs Warning",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "count(gpumon_gpu_health_state == 2) or vector(0)",
+          "refId": "A",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "id": 3
+    },
+    {
+      "type": "stat",
+      "title": "GPUs Monitored",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "count(gpumon_gpu_health_state) or vector(0)",
+          "refId": "A",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "id": 4
+    },
+    {
+      "type": "timeseries",
+      "title": "Temperature (\u00b0C)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "showPoints": "never",
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_temperature_celsius{node=~\"$node\"}",
+          "refId": "A",
+          "legendFormat": "{{node}} / {{gpu}}"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_hotspot_celsius{node=~\"$node\"}",
+          "refId": "B",
+          "legendFormat": "{{node}} / {{gpu}} hotspot"
+        }
+      ],
+      "id": 5
+    },
+    {
+      "type": "timeseries",
+      "title": "GPU Utilization (%)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "showPoints": "never",
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_utilization_percent{node=~\"$node\"}",
+          "refId": "A",
+          "legendFormat": "{{node}} / {{gpu}}"
+        }
+      ],
+      "id": 6
+    },
+    {
+      "type": "timeseries",
+      "title": "Core Clock vs Expected (MHz)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rotmhz",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "showPoints": "never",
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_clock_mhz{node=~\"$node\"}",
+          "refId": "A",
+          "legendFormat": "{{node}} / {{gpu}} actual"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_expected_clock_mhz{node=~\"$node\"}",
+          "refId": "B",
+          "legendFormat": "{{node}} / {{gpu}} expected"
+        }
+      ],
+      "id": 7
+    },
+    {
+      "type": "timeseries",
+      "title": "Board Power vs Limit (W)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "showPoints": "never",
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_power_watts{node=~\"$node\"}",
+          "refId": "A",
+          "legendFormat": "{{node}} / {{gpu}} draw"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_power_limit_watts{node=~\"$node\"}",
+          "refId": "B",
+          "legendFormat": "{{node}} / {{gpu}} limit"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_expected_power_watts{node=~\"$node\"}",
+          "refId": "C",
+          "legendFormat": "{{node}} / {{gpu}} expected"
+        }
+      ],
+      "id": 8
+    },
+    {
+      "type": "timeseries",
+      "title": "Fan Speed (RPM)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rotrpm",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "showPoints": "never",
+            "spanNulls": true
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_fan_rpm{node=~\"$node\"}",
+          "refId": "A",
+          "legendFormat": "{{node}} / {{gpu}}"
+        }
+      ],
+      "id": 9
+    },
+    {
+      "type": "table",
+      "title": "Active Alerts",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gpumon-prom"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gpumon-prom"
+          },
+          "expr": "gpumon_gpu_alert_active{node=~\"$node\"}",
+          "refId": "A",
+          "instant": true,
+          "range": false,
+          "format": "table"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "__name__": true,
+              "job": true,
+              "instance": true,
+              "name": true
+            },
+            "renameByName": {
+              "node": "Node",
+              "gpu": "GPU",
+              "vendor": "Vendor",
+              "code": "Alert",
+              "severity": "Severity"
+            }
+          }
+        }
+      ],
+      "id": 10
+    }
+  ]
+}

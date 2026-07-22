@@ -1,0 +1,11 @@
+# gpumon runs on the Python standard library alone.
+# These are OPTIONAL enhancements — install only what you need:
+
+# NVIDIA metrics without shelling out to nvidia-smi
+pynvml ; python_version >= "3.7"
+
+# Node-side MQTT publishing and the central MQTT->Prometheus bridge
+paho-mqtt
+
+# Rated-spec enrichment (TDP / boost clock) by GPU model name
+dbgpu

@@ -1,0 +1,36 @@
+{
+  "interval": 5,
+  "db": "gpumon.db",
+  "api": {
+    "host": "127.0.0.1",
+    "port": 8642
+  },
+  "enrich": true,
+  "use_dbgpu": true,
+  "specs_file": null,
+  "mqtt": {
+    "host": null,
+    "port": 1883,
+    "node": null,
+    "base": "gpumon",
+    "username": null,
+    "password": null,
+    "tls": false,
+    "qos": 0
+  },
+  "thresholds": {
+    "temp_warn_c": 85,
+    "temp_crit_c": 95,
+    "hotspot_crit_c": 105,
+    "fan_zero_temp_c": 65,
+    "load_active_pct": 80,
+    "clock_shortfall_pct": 25,
+    "power_shortfall_pct": 30,
+    "min_learn_samples": 30,
+    "alert_repeat_s": 300
+  },
+  "expected": {
+    "nvidia:0": { "max_clock_mhz": 2100, "power_w": 320 },
+    "amd:0": { "max_clock_mhz": 2500, "power_w": 260 }
+  }
+}

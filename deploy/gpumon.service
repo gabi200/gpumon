@@ -1,0 +1,29 @@
+[Unit]
+Description=gpumon cross-vendor GPU monitor and early-failure detector
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# DynamicUser gives an isolated service account with no shell/home.
+DynamicUser=yes
+# Access to GPU sensors: video/render cover amdgpu sysfs and NVML.
+SupplementaryGroups=video render
+ExecStart=/usr/bin/python3 -m gpumon --config /etc/gpumon/config.json
+WorkingDirectory=/opt/gpumon
+Restart=always
+RestartSec=5
+
+# Persisted database lives in /var/lib/gpumon (StateDirectory handles perms).
+StateDirectory=gpumon
+Environment=PYTHONPATH=/opt/gpumon
+
+# Hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/var/lib/gpumon
+
+[Install]
+WantedBy=multi-user.target
