@@ -40,11 +40,11 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# --- pick a docker compose invocation ------------------------------------
-if docker compose version >/dev/null 2>&1; then
-    COMPOSE=(docker compose)
+# --- pick a docker compose invocation (run via sudo) ---------------------
+if sudo docker compose version >/dev/null 2>&1; then
+    COMPOSE=(sudo docker compose)
 elif command -v docker-compose >/dev/null 2>&1; then
-    COMPOSE=(docker-compose)
+    COMPOSE=(sudo docker-compose)
 else
     echo "error: need 'docker compose' or 'docker-compose' on PATH" >&2
     exit 1
