@@ -136,6 +136,18 @@ per GPU, and re-exposes it on one Prometheus endpoint with `node` / `gpu` /
 `vendor` labels — so the same metric names work whether you scrape one machine
 or a hundred.
 
+### Try it end-to-end on one machine
+
+```bash
+./deploy/test-stack.sh
+```
+
+Brings up the whole central stack **and** starts a local gpumon node that
+publishes this machine's real GPUs to it — so you can watch telemetry flow all
+the way into Grafana on a single box. Ctrl-C stops the node and tears the stack
+down (`--keep` leaves it running; `down` just tears down). It auto-creates a
+throwaway venv for `paho-mqtt` if needed.
+
 ### Central host (one command)
 
 ```bash
